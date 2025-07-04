@@ -1,0 +1,38 @@
+<div class="container">
+  <div class="page-header">
+    <h1>My Allies</h1>
+    <%= link_to "Add New Ally", new_ally_path, class: "btn btn-primary" %>
+  </div>
+
+  <% if @allies.any? %>
+    <div class="allies-grid">
+      <% @allies.each do |ally| %>
+        <div class="ally-card">
+          <div class="ally-info">
+            <h3><%= ally.ally_email %></h3>
+            <p class="ally-date">Added: <%= ally.created_at.strftime("%B %d, %Y") %></p>
+          </div>
+          <div class="ally-actions">
+            <%= link_to "Assign Task", new_task_path(ally_id: ally.id), class: "btn btn-primary btn-sm" %>
+            <%= link_to "View Tasks", tasks_path(ally_id: ally.id), class: "btn btn-info btn-sm" %>
+            <%= link_to "Edit", edit_ally_path(ally), class: "btn btn-secondary btn-sm" %>
+            <%= button_to "Remove", ally_path(ally), method: :delete, 
+                class: "btn btn-danger btn-sm", 
+                form: { style: 'display: inline;' },
+                data: { confirm: "Are you sure you want to remove this ally?" } %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="empty-state">
+      <h2>No Allies Yet</h2>
+      <p>Start building your wellness support network by adding your first ally!</p>
+      <%= link_to "Add Your First Ally", new_ally_path, class: "btn btn-primary" %>
+    </div>
+  <% end %>
+
+  <div class="page-actions">
+    <%= link_to "Back to Dashboard", dashboard_path, class: "btn btn-secondary" %>
+  </div>
+</div> 

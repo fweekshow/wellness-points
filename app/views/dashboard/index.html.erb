@@ -1,0 +1,114 @@
+<div class="container">
+  <h1>Welcome, <%= @user.username || @user.email %>!</h1>
+  
+  <div class="dashboard-grid">
+    <!-- User Info Section -->
+    <div class="dashboard-section">
+      <h2>Your Profile</h2>
+      <div class="user-info">
+        <p><strong>Email:</strong> <%= @user.email %></p>
+        <p><strong>Username:</strong> <%= @user.username || "Not set" %></p>
+        <p><strong>Wallet Address:</strong> <%= @user.wallet_address || "Not set" %></p>
+      </div>
+    </div>
+
+    <!-- Allies Section -->
+    <div class="dashboard-section">
+      <h2>Your Allies (<%= @allies.count %>)</h2>
+      <% if @allies.any? %>
+        <ul class="allies-list">
+          <% @allies.each do |ally| %>
+            <li><%= ally.ally_email %></li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>No allies yet. <%= link_to "Add your first ally", new_ally_path, class: "btn btn-primary" %></p>
+      <% end %>
+      <%= link_to "Manage Allies", allies_path, class: "btn btn-secondary" %>
+    </div>
+
+    <!-- Recent Transactions Section -->
+    <div class="dashboard-section">
+      <h2>Recent Sent Points</h2>
+      <% if @sent_transactions.any? %>
+        <ul class="transactions-list">
+          <% @sent_transactions.each do |transaction| %>
+            <li>
+              <strong><%= transaction.task %></strong> - 
+              <%= transaction.points %> points to <%= transaction.receiver.email %>
+              <small>(<%= transaction.created_at.strftime("%b %d") %>)</small>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>No sent transactions yet.</p>
+      <% end %>
+    </div>
+
+    <!-- Received Points Section -->
+    <div class="dashboard-section">
+      <h2>Recent Received Points</h2>
+      <% if @received_transactions.any? %>
+        <ul class="transactions-list">
+          <% @received_transactions.each do |transaction| %>
+            <li>
+              <strong><%= transaction.task %></strong> - 
+              <%= transaction.points %> points from <%= transaction.giver.email %>
+              <small>(<%= transaction.created_at.strftime("%b %d") %>)</small>
+              <% unless transaction.claimed %>
+                <span class="unclaimed">Unclaimed</span>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>No received transactions yet.</p>
+      <% end %>
+    </div>
+
+    <!-- Assigned Tasks Section -->
+    <div class="dashboard-section">
+      <h2>Recent Assigned Tasks</h2>
+      <% if @assigned_tasks.any? %>
+        <ul class="tasks-list">
+          <% @assigned_tasks.each do |task| %>
+            <li>
+              <strong><%= task.title %></strong> - 
+              <%= task.points %> points to <%= task.ally.ally_email %>
+              <small>(<%= task.due_date.strftime("%b %d") %>)</small>
+              <span class="status-badge <%= task.status %>"><%= task.status.titleize %></span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>No assigned tasks yet.</p>
+      <% end %>
+    </div>
+
+    <!-- Received Tasks Section -->
+    <div class="dashboard-section">
+      <h2>Recent Tasks Assigned to Me</h2>
+      <% if @received_tasks.any? %>
+        <ul class="tasks-list">
+          <% @received_tasks.each do |task| %>
+            <li>
+              <strong><%= task.title %></strong> - 
+              <%= task.points %> points from <%= task.user.email %>
+              <small>(<%= task.due_date.strftime("%b %d") %>)</small>
+              <span class="status-badge <%= task.status %>"><%= task.status.titleize %></span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>No tasks assigned to you yet.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="dashboard-actions">
+    <%= link_to "Assign Task", new_task_path, class: "btn btn-primary" %>
+    <%= link_to "View All Tasks", tasks_path, class: "btn btn-info" %>
+    <%= link_to "Send Points", new_point_transaction_path, class: "btn btn-secondary" %>
+    <%= link_to "View All Transactions", point_transactions_path, class: "btn btn-secondary" %>
+  </div>
+</div>

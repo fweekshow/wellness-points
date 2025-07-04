@@ -1,0 +1,64 @@
+# Project Name:
+Wellness Points App
+
+# Description:
+A secure and minimal Rails app where users sign up via email/password, add "Allies" by email, and assign points to them for completing healthy or meaningful tasks. Users can later connect a wallet to claim their points as onchain tokens (future phase).
+
+# Core Concepts:
+- Every user can give and receive points.
+- Points are assigned only to authorized users ("Allies") the user has added.
+- Each point assignment includes a task description and value.
+- Future integration will allow claiming points to tokens via connected wallet.
+
+# Models:
+## User
+- Devise-authenticated (email/password)
+- username:string
+- wallet_address:string (optional)
+- Relationships:
+  - has_many :allies
+  - has_many :sent_transactions (as giver)
+  - has_many :received_transactions (as receiver)
+
+## Ally
+- user:references (the one assigning points)
+- ally_email:string (email of recipient user, even if not signed up yet)
+- Validations:
+  - Cannot add yourself
+  - Valid email format
+
+## PointTransaction
+- giver:references → User
+- receiver:references → User
+- task:string
+- points:integer
+- claimed:boolean (default: false)
+- claimed_at:timestamp
+- Validations:
+  - Cannot give points to yourself
+  - Must match an existing Ally relationship
+
+# Permissions & Rules:
+- Only signed-in users can access app
+- Users can only assign points to Allies they've added
+- Users can only view their own given/received points
+- Claiming points to tokens requires wallet connection (future)
+
+# Frontend Plan:
+- ERB with Turbo Streams (optional React later)
+- Dashboard with 2 tabs:
+  - Tab 1: Assign Points (to Allies)
+  - Tab 2: View Received Points (feed of point history)
+
+# Technology Stack:
+- Ruby on Rails
+- PostgreSQL
+- Devise
+- ERB/Turbo or React
+- Deployment target: Fly.io / Render
+- Local: PostgreSQL + Rails server
+
+# Phase 2:
+- Wallet connection flow (Ethereum, Base)
+- Onchain token minting or claim flow
+- Token claim audit trail and rate limiting

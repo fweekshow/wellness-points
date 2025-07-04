@@ -1,0 +1,38 @@
+<div class="container">
+  <h1>Welcome to Wellness Points</h1>
+  <p>Your journey to better health starts here!</p>
+  
+  <div class="auth-links">
+    <% if user_signed_in? %>
+      <p>Hello, <%= current_user.username || current_user.email %>!</p>
+      <p>Wallet Address: <%= current_user.wallet_address %></p>
+      <%= link_to "Go to Dashboard", dashboard_path, class: "btn btn-primary" %>
+      <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "btn btn-danger", form: { style: 'display: inline;' } %>
+    <% else %>
+      <div class="landing-content">
+        <h2>Join the Wellness Community</h2>
+        <p>Connect with allies, earn points for healthy activities, and support each other's wellness journey.</p>
+        
+        <div class="cta-buttons">
+          <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-primary" %>
+          <%= link_to "Sign In", new_user_session_path, class: "btn btn-secondary" %>
+        </div>
+        
+        <div class="features">
+          <div class="feature">
+            <h3>🤝 Connect with Allies</h3>
+            <p>Build your wellness support network</p>
+          </div>
+          <div class="feature">
+            <h3>⭐ Earn Points</h3>
+            <p>Get rewarded for healthy activities</p>
+          </div>
+          <div class="feature">
+            <h3>🎯 Track Progress</h3>
+            <p>Monitor your wellness journey</p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="page-header">
+    <h1>Send Points</h1>
+  </div>
+
+  <div class="form-container">
+    <%= form_with(model: @point_transaction, local: true) do |form| %>
+      <% if @point_transaction.errors.any? %>
+        <div class="error-messages">
+          <h2><%= pluralize(@point_transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
+          <ul>
+            <% @point_transaction.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= form.label :receiver_id, "Send to User" %>
+        <%= form.collection_select :receiver_id, User.where.not(id: current_user.id), :id, :email, 
+            { prompt: "Select a user to send points to" }, 
+            { class: "form-control" } %>
+        <small class="form-text">Choose the user you want to send points to.</small>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :task, "Task or Activity" %>
+        <%= form.text_field :task, class: "form-control", placeholder: "e.g., Completed morning workout, Helped with project" %>
+        <small class="form-text">Describe the task or activity that earned these points.</small>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :points, "Number of Points" %>
+        <%= form.number_field :points, class: "form-control", placeholder: "10", min: 1 %>
+        <small class="form-text">Enter the number of points to award.</small>
+      </div>
+
+      <div class="form-actions">
+        <%= form.submit "Send Points", class: "btn btn-primary" %>
+        <%= link_to "Cancel", point_transactions_path, class: "btn btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+</div> 

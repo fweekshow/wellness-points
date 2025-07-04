@@ -1,0 +1,31 @@
+<div class="container">
+  <div class="page-header">
+    <h1>Add New Ally</h1>
+  </div>
+
+  <div class="form-container">
+    <%= form_with(model: @ally, local: true) do |form| %>
+      <% if @ally.errors.any? %>
+        <div class="error-messages">
+          <h2><%= pluralize(@ally.errors.count, "error") %> prohibited this ally from being saved:</h2>
+          <ul>
+            <% @ally.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= form.label :ally_email, "Ally's Email Address" %>
+        <%= form.email_field :ally_email, class: "form-control", placeholder: "Enter your ally's email address" %>
+        <small class="form-text">This will be the email address of your wellness ally.</small>
+      </div>
+
+      <div class="form-actions">
+        <%= form.submit "Add Ally", class: "btn btn-primary" %>
+        <%= link_to "Cancel", allies_path, class: "btn btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+</div> 

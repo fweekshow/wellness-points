@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  giver: one
+  receiver: one
+  task: MyString
+  points: 1
+  claimed: false
+  claimed_at: 2025-07-03 15:15:30
+
+two:
+  giver: two
+  receiver: two
+  task: MyString
+  points: 1
+  claimed: false
+  claimed_at: 2025-07-03 15:15:30

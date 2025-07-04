@@ -1,0 +1,63 @@
+<div class="container">
+  <div class="page-header">
+    <h1>Assign New Task</h1>
+  </div>
+
+  <div class="form-container">
+    <%= form_with(model: @task, local: true) do |form| %>
+      <% if @task.errors.any? %>
+        <div class="error-messages">
+          <h2><%= pluralize(@task.errors.count, "error") %> prohibited this task from being saved:</h2>
+          <ul>
+            <% @task.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= form.label :ally_id, "Assign to Ally" %>
+        <%= form.collection_select :ally_id, current_user.allies, :id, :ally_email, 
+            { prompt: "Select an ally to assign this task to" }, 
+            { class: "form-control" } %>
+        <small class="form-text">Choose the ally who will complete this task.</small>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :title, "Task Title" %>
+        <%= form.text_field :title, class: "form-control", placeholder: "e.g., Complete morning workout, Help with project" %>
+        <small class="form-text">Give your task a clear, descriptive title.</small>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :description, "Task Description" %>
+        <%= form.text_area :description, class: "form-control", rows: 4, placeholder: "Provide detailed instructions for completing this task..." %>
+        <small class="form-text">Describe what needs to be done to complete this task.</small>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :points, "Points to Award" %>
+        <%= form.number_field :points, class: "form-control", placeholder: "10", min: 1 %>
+        <small class="form-text">How many points should be awarded when this task is completed?</small>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :due_date, "Due Date" %>
+        <%= form.date_field :due_date, class: "form-control" %>
+        <small class="form-text">When should this task be completed by?</small>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :status, "Initial Status" %>
+        <%= form.select :status, Task.statuses.keys.map { |s| [s.titleize, s] }, {}, { class: "form-control" } %>
+        <small class="form-text">Set the initial status for this task.</small>
+      </div>
+
+      <div class="form-actions">
+        <%= form.submit "Assign Task", class: "btn btn-primary" %>
+        <%= link_to "Cancel", tasks_path, class: "btn btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+</div> 
