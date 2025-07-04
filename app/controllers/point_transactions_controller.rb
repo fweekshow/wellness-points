@@ -41,7 +41,7 @@ class PointTransactionsController < ApplicationController
 
   def claim
     @point_transaction = current_user.received_transactions.find(params[:id])
-    @point_transaction.update(claimed: true, claimed_at: Time.current)
+    @point_transaction.claim!
     redirect_to point_transactions_path, notice: 'Points were successfully claimed!'
   end
 

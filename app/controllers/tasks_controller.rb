@@ -50,10 +50,13 @@ class TasksController < ApplicationController
   end
 
   def complete
+    Rails.logger.info "[DEBUG] Attempting to complete task: id=#{@task.id}, status=#{@task.status}, recipient=#{is_recipient?}, current_user=#{current_user.id}, ally_user_id=#{@task.ally.ally_user_id}"
     if @task.in_progress? && is_recipient?
       @task.complete!
+      Rails.logger.info "[DEBUG] Task completed successfully."
       redirect_to tasks_path, notice: "Task completed! #{@task.points} points awarded."
     else
+      Rails.logger.info "[DEBUG] Unable to complete task: status=#{@task.status}, recipient=#{is_recipient?}, current_user=#{current_user.id}, ally_user_id=#{@task.ally.ally_user_id}"
       redirect_to tasks_path, alert: 'Unable to complete task.'
     end
   end

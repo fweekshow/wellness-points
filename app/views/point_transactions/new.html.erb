@@ -17,11 +17,11 @@
       <% end %>
 
       <div class="form-group">
-        <%= form.label :receiver_id, "Send to User" %>
-        <%= form.collection_select :receiver_id, User.where.not(id: current_user.id), :id, :email, 
-            { prompt: "Select a user to send points to" }, 
+        <%= form.label :receiver_id, "Send to Ally" %>
+        <%= form.collection_select :receiver_id, current_user.allies.map(&:ally_user).compact, :id, :display_name, 
+            { prompt: "Select an ally to send points to" }, 
             { class: "form-control" } %>
-        <small class="form-text">Choose the user you want to send points to.</small>
+        <small class="form-text">Choose the ally you want to send points to.</small>
       </div>
 
       <div class="form-group">

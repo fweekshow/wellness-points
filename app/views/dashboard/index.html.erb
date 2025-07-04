@@ -1,18 +1,8 @@
 <div class="container">
-  <h1>Welcome, <%= @user.username || @user.email %>!</h1>
+  <h1>Welcome, <%= @user.alias || @user.email %>!</h1>
   
   <div class="dashboard-grid">
     <!-- User Info Section -->
-    <div class="dashboard-section">
-      <h2>Your Profile</h2>
-      <div class="user-info">
-        <p><strong>Email:</strong> <%= @user.email %></p>
-        <p><strong>Username:</strong> <%= @user.username || "Not set" %></p>
-        <p><strong>Wallet Address:</strong> <%= @user.wallet_address || "Not set" %></p>
-      </div>
-    </div>
-
-    <!-- Allies Section -->
     <div class="dashboard-section">
       <h2>Your Allies (<%= @allies.count %>)</h2>
       <% if @allies.any? %>
@@ -26,82 +16,84 @@
       <% end %>
       <%= link_to "Manage Allies", allies_path, class: "btn btn-secondary" %>
     </div>
+  </div>
 
-    <!-- Recent Transactions Section -->
-    <div class="dashboard-section">
-      <h2>Recent Sent Points</h2>
-      <% if @sent_transactions.any? %>
-        <ul class="transactions-list">
-          <% @sent_transactions.each do |transaction| %>
-            <li>
-              <strong><%= transaction.task %></strong> - 
-              <%= transaction.points %> points to <%= transaction.receiver.email %>
-              <small>(<%= transaction.created_at.strftime("%b %d") %>)</small>
-            </li>
-          <% end %>
-        </ul>
-      <% else %>
-        <p>No sent transactions yet.</p>
-      <% end %>
+  <!-- Progress Container -->
+  <div class="progress-container">
+    <div class="points-summary">
+      <h2>Total Points</h2>
+      <div class="points-value"><%= @user.points %></div>
     </div>
-
-    <!-- Received Points Section -->
-    <div class="dashboard-section">
-      <h2>Recent Received Points</h2>
-      <% if @received_transactions.any? %>
-        <ul class="transactions-list">
-          <% @received_transactions.each do |transaction| %>
-            <li>
-              <strong><%= transaction.task %></strong> - 
-              <%= transaction.points %> points from <%= transaction.giver.email %>
-              <small>(<%= transaction.created_at.strftime("%b %d") %>)</small>
-              <% unless transaction.claimed %>
-                <span class="unclaimed">Unclaimed</span>
-              <% end %>
-            </li>
-          <% end %>
-        </ul>
-      <% else %>
-        <p>No received transactions yet.</p>
-      <% end %>
-    </div>
-
-    <!-- Assigned Tasks Section -->
-    <div class="dashboard-section">
-      <h2>Recent Assigned Tasks</h2>
-      <% if @assigned_tasks.any? %>
-        <ul class="tasks-list">
-          <% @assigned_tasks.each do |task| %>
-            <li>
-              <strong><%= task.title %></strong> - 
-              <%= task.points %> points to <%= task.ally.ally_email %>
-              <small>(<%= task.due_date.strftime("%b %d") %>)</small>
-              <span class="status-badge <%= task.status %>"><%= task.status.titleize %></span>
-            </li>
-          <% end %>
-        </ul>
-      <% else %>
-        <p>No assigned tasks yet.</p>
-      <% end %>
-    </div>
-
-    <!-- Received Tasks Section -->
-    <div class="dashboard-section">
-      <h2>Recent Tasks Assigned to Me</h2>
-      <% if @received_tasks.any? %>
-        <ul class="tasks-list">
-          <% @received_tasks.each do |task| %>
-            <li>
-              <strong><%= task.title %></strong> - 
-              <%= task.points %> points from <%= task.user.email %>
-              <small>(<%= task.due_date.strftime("%b %d") %>)</small>
-              <span class="status-badge <%= task.status %>"><%= task.status.titleize %></span>
-            </li>
-          <% end %>
-        </ul>
-      <% else %>
-        <p>No tasks assigned to you yet.</p>
-      <% end %>
+    <div class="progress-cards">
+      <div class="progress-card">
+        <h3>Recent Sent Points</h3>
+        <% if @sent_transactions.any? %>
+          <ul class="transactions-list">
+            <% @sent_transactions.each do |transaction| %>
+              <li>
+                <strong><%= transaction.task %></strong> - 
+                <%= transaction.points %> points to <%= transaction.receiver.alias || transaction.receiver.email %>
+                <small>(<%= transaction.created_at.strftime("%b %d") %>)</small>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p>No sent transactions yet.</p>
+        <% end %>
+      </div>
+      <div class="progress-card">
+        <h3>Recent Received Points</h3>
+        <% if @received_transactions.any? %>
+          <ul class="transactions-list">
+            <% @received_transactions.each do |transaction| %>
+              <li>
+                <strong><%= transaction.task %></strong> - 
+                <%= transaction.points %> points from <%= transaction.giver.alias || transaction.giver.email %>
+                <small>(<%= transaction.created_at.strftime("%b %d") %>)</small>
+                <% unless transaction.claimed %>
+                  <span class="unclaimed">Unclaimed</span>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p>No received transactions yet.</p>
+        <% end %>
+      </div>
+      <div class="progress-card">
+        <h3>Recent Assigned Tasks</h3>
+        <% if @assigned_tasks.any? %>
+          <ul class="tasks-list">
+            <% @assigned_tasks.each do |task| %>
+              <li>
+                <strong><%= task.title %></strong> - 
+                <%= task.points %> points to <%= task.ally.ally_email %>
+                <small>(<%= task.due_date.strftime("%b %d") %>)</small>
+                <span class="status-badge <%= task.status %>"><%= task.status.titleize %></span>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p>No assigned tasks yet.</p>
+        <% end %>
+      </div>
+      <div class="progress-card">
+        <h3>Recent Tasks Assigned to Me</h3>
+        <% if @received_tasks.any? %>
+          <ul class="tasks-list">
+            <% @received_tasks.each do |task| %>
+              <li>
+                <strong><%= task.title %></strong> - 
+                <%= task.points %> points from <%= task.user.alias || task.user.email %>
+                <small>(<%= task.due_date.strftime("%b %d") %>)</small>
+                <span class="status-badge <%= task.status %>"><%= task.status.titleize %></span>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p>No tasks assigned to you yet.</p>
+        <% end %>
+      </div>
     </div>
   </div>
 

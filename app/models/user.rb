@@ -14,4 +14,9 @@ class User < ApplicationRecord
   def received_tasks
     Task.joins(:ally).where(allies: { ally_user_id: id })
   end
+
+  # Returns display name (alias or email)
+  def display_name
+    self[:alias].presence || email
+  end
 end

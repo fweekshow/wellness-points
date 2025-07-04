@@ -11,25 +11,41 @@
   </head>
 
   <body>
-    <nav class="navbar">
-      <div class="nav-container">
-        <div class="nav-brand">
-          <%= link_to "Wellness Points", root_path %>
-        </div>
-        <% if user_signed_in? %>
-          <div class="nav-links">
-            <%= link_to "Dashboard", dashboard_path %>
-            <%= link_to "Allies", allies_path %>
-            <%= link_to "Tasks", tasks_path %>
-            <%= link_to "Transactions", point_transactions_path %>
-            <%= button_to "Log Out", destroy_user_session_path, method: :delete, class: "nav-link", form: { style: 'display: inline;' } %>
+    <div class="app-shell">
+      <% if user_signed_in? %>
+        <aside class="sidebar">
+          <div class="sidebar-brand">
+            <%= link_to "Wellness Points", root_path, class: "sidebar-logo" %>
           </div>
+          <nav class="sidebar-nav">
+            <%= link_to "Dashboard", dashboard_path, class: "sidebar-link" %>
+            <%= link_to "Allies", allies_path, class: "sidebar-link" %>
+            <%= link_to "Tasks", tasks_path, class: "sidebar-link" %>
+            <%= link_to "Points", point_transactions_path, class: "sidebar-link" %>
+          </nav>
+        </aside>
+      <% end %>
+      <main class="main-area<%= ' no-sidebar' unless user_signed_in? %>">
+        <% if user_signed_in? %>
+          <header class="topbar" style="background: transparent; box-shadow: none;">
+            <div class="topbar-content" style="display: flex; justify-content: flex-end; align-items: center; height: 64px;">
+              <div class="profile-dropdown-container">
+                <button class="profile-dropdown-trigger btn btn-secondary" aria-haspopup="true" aria-expanded="false" data-profile-dropdown-trigger>
+                  <%= current_user.alias.presence || current_user.email.split('@').first %>
+                </button>
+                <div class="profile-dropdown" style="display: none;">
+                  <%= link_to "View Profile", edit_user_registration_path, class: "profile-dropdown-link" %>
+                  <%= link_to "Connect Wallet", "/profile/wallet", class: "profile-dropdown-link" %>
+                  <%= button_to "Log Out", destroy_user_session_path, method: :delete, class: "profile-dropdown-link logout-link", form: { style: 'display: inline;' } %>
+                </div>
+              </div>
+            </div>
+          </header>
         <% end %>
-      </div>
-    </nav>
-    
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-    <%= yield %>
+        <section class="content-area<%= ' no-sidebar' unless user_signed_in? %>">
+          <%= yield %>
+        </section>
+      </main>
+    </div>
   </body>
 </html>

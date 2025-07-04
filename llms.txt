@@ -62,3 +62,10 @@ A secure and minimal Rails app where users sign up via email/password, add "Alli
 - Wallet connection flow (Ethereum, Base)
 - Onchain token minting or claim flow
 - Token claim audit trail and rate limiting
+
+Minimal, soft tones (white, off-black, pale grays, misty blue accents)
+Rounded corners
+Subtle shadows / depth
+Breathing room (spaced layout)
+Light glow or soft gradients (can add later)
+Elegant icon spacing & type

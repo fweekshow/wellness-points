@@ -27,15 +27,22 @@ class Task < ApplicationRecord
   end
 
   def complete!
-    update!(status: 'completed')
-    # Create a point transaction when task is completed
-    PointTransaction.create!(
-      giver: user,
-      receiver: ally.user,
-      task: title,
-      points: points,
-      claimed: false
-    )
+    transaction do
+      update!(status: 'completed')
+      # Award points to the user who completed the task (the ally's user)
+      if ally.ally_user_id && User.exists?(ally.ally_user_id)
+        recipient = User.find(ally.ally_user_id)
+        recipient.increment!(:points, points)
+      end
+      # Create a point transaction when task is completed
+      PointTransaction.create!(
+        giver: user,
+        receiver: ally.ally_user,
+        task: title,
+        points: points,
+        claimed: false
+      )
+    end
   end
   
   def overdue?

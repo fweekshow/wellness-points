@@ -14,7 +14,7 @@
             <div class="transaction-card">
               <div class="transaction-info">
                 <h3><%= transaction.task %></h3>
-                <p><strong>To:</strong> <%= transaction.receiver.email %></p>
+                <p><strong>To:</strong> <%= transaction.receiver.alias || transaction.receiver.email %></p>
                 <p><strong>Points:</strong> <%= transaction.points %></p>
                 <p><strong>Date:</strong> <%= transaction.created_at.strftime("%B %d, %Y") %></p>
               </div>
@@ -45,7 +45,7 @@
             <div class="transaction-card <%= 'unclaimed' unless transaction.claimed %>">
               <div class="transaction-info">
                 <h3><%= transaction.task %></h3>
-                <p><strong>From:</strong> <%= transaction.giver.email %></p>
+                <p><strong>From:</strong> <%= transaction.giver.alias || transaction.giver.email %></p>
                 <p><strong>Points:</strong> <%= transaction.points %></p>
                 <p><strong>Date:</strong> <%= transaction.created_at.strftime("%B %d, %Y") %></p>
                 <% if transaction.claimed %>

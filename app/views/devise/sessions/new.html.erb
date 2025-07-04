@@ -1,0 +1,37 @@
+<div class="centered-bg" style="min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 3vh;">
+  <%= link_to root_path, style: 'position: absolute; left: 2em; top: 2em; font-size: 1.7em; color: #6c63ff; text-decoration: none;', title: 'Home', 'aria-label': 'Home' do %>
+    <span role="img" aria-label="Home">🏠</span>
+  <% end %>
+  <div class="card-auth" style="margin-bottom: 1.2em;">
+    <h2>Log in</h2>
+
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <div class="form-group">
+        <%= f.label :email %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password %>
+        <%= f.password_field :password, autocomplete: "current-password", class: "form-control" %>
+      </div>
+
+      <% if devise_mapping.rememberable? %>
+        <div class="form-group">
+          <%= f.check_box :remember_me %>
+          <%= f.label :remember_me %>
+        </div>
+      <% end %>
+
+      <div class="actions">
+        <%= f.submit "Log in", class: "btn btn-primary w-100" %>
+      </div>
+    <% end %>
+  </div>
+  <div style="text-align:center; font-size:1em; color:#666; width: 100%; max-width: 400px;">
+    Don't have an account?
+    <%= link_to "Sign up", new_user_registration_path, style: "margin-left:0.3em; color:#6c63ff; text-decoration:underline; font-weight:500;" %>
+  </div>
+</div>
