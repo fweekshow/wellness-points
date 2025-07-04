@@ -7,7 +7,7 @@
   <div class="tasks-container">
     <!-- Assigned Tasks -->
     <div class="task-section">
-      <h2>Tasks I've Assigned</h2>
+      <h2>Ally Assignments</h2>
       <% if @assigned_tasks.any? %>
         <div class="tasks-list">
           <% @assigned_tasks.each do |task| %>
@@ -38,7 +38,7 @@
 
     <!-- Received Tasks -->
     <div class="task-section">
-      <h2>Tasks Assigned to Me</h2>
+      <h2>My Tasks</h2>
       <% if @received_tasks.any? %>
         <div class="tasks-list">
           <% @received_tasks.each do |task| %>

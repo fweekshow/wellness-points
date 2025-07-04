@@ -18,9 +18,8 @@
 
       <div class="form-group">
         <%= form.label :ally_id, "Assign to Ally" %>
-        <%= form.collection_select :ally_id, current_user.allies, :id, :ally_email, 
-            { prompt: "Select an ally to assign this task to" }, 
-            { class: "form-control" } %>
+        <% ally_options = current_user.allies.map { |ally| [ally.ally_user&.display_name || ally.ally_email, ally.id] } %>
+        <%= form.select :ally_id, options_for_select(ally_options, @task.ally_id), { prompt: "Select an ally to assign this task to" }, { class: "form-control" } %>
         <small class="form-text">Choose the ally who will complete this task.</small>
       </div>
 
