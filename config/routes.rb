@@ -34,4 +34,6 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "home#index"
+
+  get 'points', to: 'point_transactions#index', as: :points
 end

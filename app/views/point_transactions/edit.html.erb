@@ -1,0 +1,14 @@
+<%= form_with(model: @point_transaction, local: false) do |form| %>
+  <div class="form-group">
+    <%= form.label :task %>
+    <%= form.text_field :task, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= form.label :points %>
+    <%= form.number_field :points, class: "form-control" %>
+  </div>
+  <div class="form-actions">
+    <%= form.submit "Update", class: "btn btn-primary" %>
+    <button type="button" class="btn btn-secondary" onclick="document.getElementById('edit-transaction-modal').style.display='none'">Cancel</button>
+  </div>
+<% end %> 

@@ -1,10 +1,45 @@
 <div class="container">
   <div class="page-header">
-    <h1>Point Transactions</h1>
+    <h1>Points</h1>
     <%= link_to "Send Points", new_point_transaction_path, class: "btn btn-primary" %>
   </div>
 
   <div class="transactions-container">
+    <!-- Received Transactions -->
+    <div class="transaction-section">
+      <h2>Received Points</h2>
+      <% if @received_transactions.any? %>
+        <div class="transactions-list">
+          <% @received_transactions.sort_by { |t| -t.created_at.to_i }.each do |transaction| %>
+            <div class="transaction-card <%= 'unclaimed' unless transaction.claimed %>">
+              <div class="transaction-info">
+                <h3><%= transaction.task %></h3>
+                <p><strong>From:</strong> <%= transaction.giver.alias || transaction.giver.email %></p>
+                <p><strong>Points:</strong> <%= transaction.points %></p>
+                <p><strong>Date:</strong> <%= transaction.created_at.strftime("%B %d, %Y") %></p>
+                <% if transaction.claimed %>
+                  <p><strong>Claimed:</strong> <%= transaction.claimed_at.strftime("%B %d, %Y") %></p>
+                <% else %>
+                  <span class="unclaimed-badge">Unclaimed</span>
+                <% end %>
+              </div>
+              <div class="transaction-actions">
+                <% unless transaction.claimed %>
+                  <%= button_to "Claim Points", claim_point_transaction_path(transaction), method: :patch, 
+                      class: "btn btn-success btn-sm", 
+                      form: { style: 'display: inline;' } %>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="empty-state">
+          <p>No received points yet.</p>
+        </div>
+      <% end %>
+    </div>
+
     <!-- Sent Transactions -->
     <div class="transaction-section">
       <h2>Sent Points</h2>
@@ -19,8 +54,7 @@
                 <p><strong>Date:</strong> <%= transaction.created_at.strftime("%B %d, %Y") %></p>
               </div>
               <div class="transaction-actions">
-                <%= link_to "View", point_transaction_path(transaction), class: "btn btn-secondary btn-sm" %>
-                <%= link_to "Edit", edit_point_transaction_path(transaction), class: "btn btn-primary btn-sm" %>
+                <%= link_to "Edit", edit_point_transaction_path(transaction), class: "btn btn-primary btn-sm edit-transaction-btn", data: { transaction_id: transaction.id } %>
                 <%= button_to "Delete", point_transaction_path(transaction), method: :delete, 
                     class: "btn btn-danger btn-sm", 
                     form: { style: 'display: inline;' },
@@ -31,43 +65,7 @@
         </div>
       <% else %>
         <div class="empty-state">
-          <p>No sent transactions yet.</p>
-        </div>
-      <% end %>
-    </div>
-
-    <!-- Received Transactions -->
-    <div class="transaction-section">
-      <h2>Received Points</h2>
-      <% if @received_transactions.any? %>
-        <div class="transactions-list">
-          <% @received_transactions.each do |transaction| %>
-            <div class="transaction-card <%= 'unclaimed' unless transaction.claimed %>">
-              <div class="transaction-info">
-                <h3><%= transaction.task %></h3>
-                <p><strong>From:</strong> <%= transaction.giver.alias || transaction.giver.email %></p>
-                <p><strong>Points:</strong> <%= transaction.points %></p>
-                <p><strong>Date:</strong> <%= transaction.created_at.strftime("%B %d, %Y") %></p>
-                <% if transaction.claimed %>
-                  <p><strong>Claimed:</strong> <%= transaction.claimed_at.strftime("%B %d, %Y") %></p>
-                <% else %>
-                  <span class="unclaimed-badge">Unclaimed</span>
-                <% end %>
-              </div>
-              <div class="transaction-actions">
-                <%= link_to "View", point_transaction_path(transaction), class: "btn btn-secondary btn-sm" %>
-                <% unless transaction.claimed %>
-                  <%= button_to "Claim Points", claim_point_transaction_path(transaction), method: :patch, 
-                      class: "btn btn-success btn-sm", 
-                      form: { style: 'display: inline;' } %>
-                <% end %>
-              </div>
-            </div>
-          <% end %>
-        </div>
-      <% else %>
-        <div class="empty-state">
-          <p>No received transactions yet.</p>
+          <p>No sent points yet.</p>
         </div>
       <% end %>
     </div>
@@ -75,5 +73,12 @@
 
   <div class="page-actions">
     <%= link_to "Back to Dashboard", dashboard_path, class: "btn btn-secondary" %>
+  </div>
+</div>
+
+<div id="edit-transaction-modal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="modal-close" id="edit-transaction-modal-close">&times;</span>
+    <div id="edit-transaction-modal-content"></div>
   </div>
 </div> 

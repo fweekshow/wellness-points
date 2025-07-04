@@ -5,54 +5,22 @@
   </div>
 
   <div class="tasks-container">
-    <!-- Assigned Tasks -->
-    <div class="task-section">
-      <h2>Ally Assignments</h2>
-      <% if @assigned_tasks.any? %>
-        <div class="tasks-list">
-          <% @assigned_tasks.each do |task| %>
-            <div class="task-card <%= task.status %>">
-              <div class="task-info">
-                <h3><%= task.title %></h3>
-                <p><strong>To:</strong> <%= task.ally.ally_email %></p>
-                <p><strong>Description:</strong> <%= task.description %></p>
-                <p><strong>Points:</strong> <%= task.points %></p>
-                <p><strong>Due:</strong> <%= task.due_date.strftime("%B %d, %Y") %></p>
-                <p><strong>Status:</strong> <span class="status-badge <%= task.status %>"><%= task.status.titleize %></span></p>
-              </div>
-              <div class="task-actions">
-                <%= button_to "Delete", task_path(task), method: :delete, 
-                    class: "btn btn-danger btn-sm", 
-                    form: { style: 'display: inline;' },
-                    data: { confirm: "Are you sure you want to delete this task?" } %>
-              </div>
-            </div>
-          <% end %>
-        </div>
-      <% else %>
-        <div class="empty-state">
-          <p>No assigned tasks yet.</p>
-        </div>
-      <% end %>
-    </div>
-
     <!-- Received Tasks -->
-    <div class="task-section">
-      <h2>My Tasks</h2>
+    <div class="task-section" style="margin-bottom: 2rem;">
+      <h2 class="tasks-section-title">My Tasks</h2>
       <% if @received_tasks.any? %>
-        <div class="tasks-list">
-          <% @received_tasks.each do |task| %>
+        <div class="tasks-scroll-container"><div class="tasks-grid">
+          <% @received_tasks.sort_by { |t| -t.created_at.to_i }.each do |task| %>
             <div class="task-card <%= task.status %>">
               <div class="task-info">
                 <h3><%= task.title %></h3>
-                <p><strong>From:</strong> <%= task.user.email %></p>
+                <p><strong>From:</strong> <%= task.user.display_name %></p>
                 <p><strong>Description:</strong> <%= task.description %></p>
                 <p><strong>Points:</strong> <%= task.points %></p>
                 <p><strong>Due:</strong> <%= task.due_date.strftime("%B %d, %Y") %></p>
                 <p><strong>Status:</strong> <span class="status-badge <%= task.status %>"><%= task.status.titleize %></span></p>
               </div>
               <div class="task-actions">
-                <%= link_to "View", task_path(task), class: "btn btn-secondary btn-sm" %>
                 <% if task.pending? %>
                   <%= button_to "Accept", accept_task_path(task), method: :patch, 
                       class: "btn btn-warning btn-sm", 
@@ -67,10 +35,41 @@
               </div>
             </div>
           <% end %>
-        </div>
+        </div></div>
       <% else %>
         <div class="empty-state">
           <p>No tasks assigned to you yet.</p>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Assigned Tasks -->
+    <div class="task-section">
+      <h2 class="tasks-section-title">Ally Assignments</h2>
+      <% if @assigned_tasks.any? %>
+        <div class="tasks-scroll-container"><div class="tasks-grid">
+          <% @assigned_tasks.sort_by { |t| -t.created_at.to_i }.each do |task| %>
+            <div class="task-card <%= task.status %>">
+              <div class="task-info">
+                <h3><%= task.title %></h3>
+                <p><strong>To:</strong> <%= task.ally.ally_user&.display_name || task.ally.ally_email %></p>
+                <p><strong>Description:</strong> <%= task.description %></p>
+                <p><strong>Points:</strong> <%= task.points %></p>
+                <p><strong>Due:</strong> <%= task.due_date.strftime("%B %d, %Y") %></p>
+                <p><strong>Status:</strong> <span class="status-badge <%= task.status %>"><%= task.status.titleize %></span></p>
+              </div>
+              <div class="task-actions">
+                <%= button_to "Delete", task_path(task), method: :delete, 
+                    class: "btn btn-danger btn-sm", 
+                    form: { style: 'display: inline;' },
+                    data: { confirm: "Are you sure you want to delete this task?" } %>
+              </div>
+            </div>
+          <% end %>
+        </div></div>
+      <% else %>
+        <div class="empty-state">
+          <p>No assigned tasks yet.</p>
         </div>
       <% end %>
     </div>
