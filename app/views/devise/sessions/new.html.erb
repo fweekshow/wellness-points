@@ -30,6 +30,9 @@
       </div>
     <% end %>
   </div>
+  <div style="text-align:center; margin-bottom: 1.5em;">
+    <%= button_to "Sign in with Google", user_google_oauth2_omniauth_authorize_path, method: :post, class: "btn btn-google", style: "background:#4285F4;color:#fff;font-weight:600;padding:12px 32px;border-radius:8px;font-size:1.1em;display:inline-block;border:none;", data: { turbo: false } %>
+  </div>
   <div style="text-align:center; font-size:1em; color:#666; width: 100%; max-width: 400px;">
     Don't have an account?
     <%= link_to "Sign up", new_user_registration_path, style: "margin-left:0.3em; color:#6c63ff; text-decoration:underline; font-weight:500;" %>

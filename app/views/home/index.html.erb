@@ -12,9 +12,12 @@
         <h2>Join the Wellness Community</h2>
         <p>Connect with allies, earn points for healthy activities, and support each other's wellness journey.</p>
         
-        <div class="cta-buttons">
-          <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-primary" %>
+        <div style="margin-top: 1.5em; text-align: center;">
+          <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-primary", style: "margin-right: 1em;" %>
           <%= link_to "Sign In", new_user_session_path, class: "btn btn-secondary" %>
+        </div>
+        <div style="text-align:center; margin-top: 1em;">
+          <%= button_to "Sign in with Google", user_google_oauth2_omniauth_authorize_path, method: :post, class: "btn btn-google", style: "background:#4285F4;color:#fff;font-weight:600;padding:12px 32px;border-radius:8px;font-size:1.1em;display:inline-block;border:none;", data: { turbo: false } %>
         </div>
         
         <div class="features">

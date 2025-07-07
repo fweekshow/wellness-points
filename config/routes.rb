@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: {
     registrations: 'users/registrations',
-    sessions: 'users/sessions'
+    sessions: 'users/sessions',
+    omniauth_callbacks: 'users/omniauth_callbacks'
   }
+  
+
   
   # Home page (landing page)
   get 'home', to: 'home#index'
