@@ -29,15 +29,29 @@
         <% if user_signed_in? %>
           <header class="topbar" style="background: transparent; box-shadow: none;">
             <div class="topbar-content" style="display: flex; justify-content: flex-end; align-items: center; height: 64px;">
-              <div class="profile-dropdown-container">
-                <button class="profile-dropdown-trigger btn btn-secondary" aria-haspopup="true" aria-expanded="false" data-profile-dropdown-trigger>
-                  <%= current_user.alias.presence || current_user.email.split('@').first %>
+              <div class="profile-dropdown-container" style="position: relative;">
+                <button id="userMenuButton" class="profile-dropdown-trigger btn btn-secondary" aria-haspopup="true" aria-expanded="false" data-profile-dropdown-trigger style="padding: 10px 20px; border-radius: 8px; background: #6c6f7c; color: #fff; font-weight: 600; border: none; cursor: pointer;">
+                  <%= current_user.alias.presence || current_user.email.split('@').first %> ▼
                 </button>
-                <div class="profile-dropdown" style="display: none;">
-                  <%= link_to "View Profile", edit_user_registration_path, class: "profile-dropdown-link" %>
-                  <%= link_to "Connect Wallet", "/profile/wallet", class: "profile-dropdown-link" %>
-                  <%= button_to "Log Out", destroy_user_session_path, method: :delete, class: "profile-dropdown-link logout-link", form: { style: 'display: inline;' } %>
+                <div id="userDropdown" class="profile-dropdown" style="display: none; position: absolute; right: 0; background: #fff; min-width: 160px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); z-index: 1; border-radius: 8px;">
+                  <%= link_to "View Profile", edit_user_registration_path, style: "display: block; padding: 12px 16px; color: #333; text-decoration: none;" %>
+                  <%= button_to "Sign Out", destroy_user_session_path, method: :delete, style: "display: block; padding: 12px 16px; color: #e74c3c; text-decoration: none; background: none; border: none; width: 100%; text-align: left;" %>
                 </div>
+                <script>
+                  document.addEventListener("DOMContentLoaded", function() {
+                    var btn = document.getElementById("userMenuButton");
+                    var dropdown = document.getElementById("userDropdown");
+                    btn.onclick = function(e) {
+                      e.preventDefault();
+                      dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+                    };
+                    document.addEventListener("click", function(e) {
+                      if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+                        dropdown.style.display = "none";
+                      }
+                    });
+                  });
+                </script>
               </div>
             </div>
           </header>

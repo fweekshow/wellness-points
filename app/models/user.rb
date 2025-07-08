@@ -22,17 +22,27 @@ class User < ApplicationRecord
   end
 
   def self.from_omniauth(access_token)
-    data = access_token.info
+    # Try to find user by provider/uid first
     user = User.where(provider: access_token.provider, uid: access_token.uid).first
 
+    # If not found, try to find by email and link the account
     unless user
-      user = User.create(
-        email: data['email'],
-        password: Devise.friendly_token[0, 20],
-        alias: data['name'],
-        provider: access_token.provider,
-        uid: access_token.uid
-      )
+      data = access_token.info
+      user = User.find_by(email: data['email'])
+
+      if user
+        # Link Google account to existing user
+        user.update(provider: access_token.provider, uid: access_token.uid)
+      else
+        # Create a new user if none exists
+        user = User.create(
+          email: data['email'],
+          password: Devise.friendly_token[0, 20],
+          alias: data['name'],
+          provider: access_token.provider,
+          uid: access_token.uid
+        )
+      end
     end
     user
   end
